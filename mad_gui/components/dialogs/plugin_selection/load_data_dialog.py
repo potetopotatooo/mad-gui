@@ -10,7 +10,7 @@ from PySide2.QtWidgets import QDialog, QLabel, QLineEdit, QPushButton
 
 from mad_gui import BaseImporter
 from mad_gui.components.dialogs.user_information import UserInformation
-from mad_gui.components.helper import ask_for_file_name, set_cursor
+from mad_gui.components.helper import ask_for_file_name, ask_for_dir_name, set_cursor
 from mad_gui.config import Config
 from mad_gui.qt_designer import UI_PATH
 from mad_gui.utils.helper import resource_path
@@ -117,7 +117,11 @@ class LoadDataDialog(QDialog):
 
     def _handle_file_select(self, property_name):
         loader = self.loaders[self.ui.combo_plugin.currentIndex()]
-        file_name = ask_for_file_name(self.base_dir, parent=self, file_type=loader.file_type[property_name])
+        # for data, we want to select a folder instead of a file
+        if property_name == "data_file":
+            file_name = ask_for_dir_name(self.base_dir, parent=self)
+        else:
+            file_name = ask_for_file_name(self.base_dir, parent=self, file_type=loader.file_type[property_name])
         if file_name is not None:
             self.state.set(property_name, file_name)
             self.base_dir = str(Path(file_name).parent)
