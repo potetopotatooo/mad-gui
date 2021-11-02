@@ -324,8 +324,8 @@ class MainWindow(QMainWindow):
         # in case the desired file name was specified in plot data, store sync data automatically
         plot_data_key = list(self.global_data.plot_data.keys())[0]
         additional_data = self.global_data.plot_data[plot_data_key].additional_data
-        study_part_specified = True if "data_specifier" in additional_data else False
-        if study_part_specified:
+        data_specifier = True if "data_specifier" in additional_data else False
+        if data_specifier:
             # automatically build sync file name
             file_name = self.global_data.data_file + os.sep + "video" + os.sep + "{}_sync".format(
                 additional_data["data_specifier"])
@@ -335,7 +335,7 @@ class MainWindow(QMainWindow):
         if file_name is None:
             return
         sync.to_excel(file_name + file_ending)
-        UserInformation().inform_user("Sync file was stored under {}".format(file_name + file_ending))
+        UserInformation().inform("Sync file was stored under {}".format(file_name + file_ending))
         for plot in self.sensor_plots.values():
             plot.adapt_to_opening_video_window()
 
