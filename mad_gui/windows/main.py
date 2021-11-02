@@ -321,10 +321,10 @@ class MainWindow(QMainWindow):
             sync = pd.concat([sync, pd.DataFrame(data=plot.sync_info, columns=[plot_name])], axis=1)
         sync = pd.concat([sync, pd.DataFrame(data=self.video_plot.sync_info, columns=["Video"])], axis=1)
         self.VideoWindow.set_sync(self.video_plot.sync_info["start"], self.video_plot.sync_info["end"])
-        file_name, _ = QFileDialog.getSaveFileName(self, "Save Synchronization File", filter="*.xlsx")
+        file_name, file_ending = QFileDialog.getSaveFileName(self, "Save Synchronization File", filter=".xlsx")
         if file_name is None:
             return
-        sync.to_excel(file_name)
+        sync.to_excel(file_name + file_ending)
         for plot in self.sensor_plots.values():
             plot.adapt_to_opening_video_window()
 
