@@ -539,10 +539,11 @@ class MainWindow(QMainWindow):
 
         # Create new plots
         for sensor_name, data in data_dict.items():
+            start_time = data.additional_data.get("start_time")  # defaults to None if start_time is not set
             plot = SensorPlot(
                 plot_data=data,
                 initial_plot_channels=getattr(Config.settings, "CHANNELS_TO_PLOT", None),
-                start_time=data.additional_data["start_time"],  # TODO: handle if this does not exist
+                start_time=start_time,
                 label_classes=self.global_data.labels,
                 event_classes=self.global_data.events,
                 parent=self,
