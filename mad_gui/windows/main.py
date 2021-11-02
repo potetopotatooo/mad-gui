@@ -542,7 +542,7 @@ class MainWindow(QMainWindow):
             plot = SensorPlot(
                 plot_data=data,
                 initial_plot_channels=getattr(Config.settings, "CHANNELS_TO_PLOT", None),
-                start_time=start_time,
+                start_time=data.additional_data["start_time"],  # TODO: handle if this does not exist
                 label_classes=self.global_data.labels,
                 event_classes=self.global_data.events,
                 parent=self,
