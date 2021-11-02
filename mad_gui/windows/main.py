@@ -502,7 +502,7 @@ class MainWindow(QMainWindow):
         """Set the synchronization for each plot"""
         if not sync_file:
             return
-        sync = self.global_data.active_loader.get_video_signal_synchronization(sync_file)
+        sync = self.global_data.active_loader._get_video_signal_synchronization(sync_file)
         unsynced_sensors = []
         for plot_name, plot in self.sensor_plots.items():
             try:
@@ -521,12 +521,12 @@ class MainWindow(QMainWindow):
         if self.VideoWindow:
             self.VideoWindow.set_sync(start_frame=sync["Video"]["start"], end_frame=sync["Video"]["end"])
 
-    def _plot_data(self, data_dict: Dict[str, PlotData]):
+    def _plot_data(self, data_dict: Dict[str, PlotData], start_time=None):
         # if len(StateKeeper.loaded_data) == 3:
         #     start_time = StateKeeper.loaded_data[2]
         # else:
         # TODO: Implement start time
-        start_time = None
+        # start_time = None
         set_cursor(self, Qt.BusyCursor)
 
         # Delete all existing plots
