@@ -5,7 +5,6 @@ c) be used to manually add/delete/adapt labels for strides and/or activites.
 
 isort:skip_file (Required import order: PySide2, pyqtgraph, mad_gui.*)
 """
-
 import os
 import sys
 import warnings
@@ -103,6 +102,7 @@ class MainWindow(QMainWindow):
         labels=None,
         events=None,
     ):
+
         super().__init__()
 
         self.check_arguments(plugins, labels, events)
@@ -122,6 +122,7 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
         c = theme.COLOR_DARK
 
+        self.setStyleSheet(f"background-color: rgb({c.red()}, {c.green()}, {c.blue()});")
         self.setStyleSheet(f"background-color: rgb({c.red()}, {c.green()}, {c.blue()});")
         self.palette().setColor(QPalette.Active, QPalette.Window, theme.COLOR_LIGHT)
         self._set_window_properties()
@@ -255,18 +256,21 @@ class MainWindow(QMainWindow):
         for k, b in self.label_buttons.items():
             b.setObjectName(k)
             b.toggled.connect(self.on_main_buttons_clicked)
+            qt_light = f"rgb({light.red()}, {light.green()}, {light.blue()})"
+            qt_lighter = f"rgb({even_lighter.red()}, {even_lighter.green()}, {even_lighter.blue()})"
+            qt_dark = f"rgb({dark.red()}, {dark.green()}, {dark.blue()})"
             b.setStyleSheet(
                 f"QPushButton"
-                f"{{\nborder:none;\npadding: 3px;\nbackground-color:rgb({light.red()},{light.green()},{light.blue()});"
-                f"\ntext-align: left;\ncolor:rgb({dark.red()},{dark.green()},{dark.blue()});\n"
+                f"{{\nborder:2px solid;\nborder-color: {qt_light};\npadding: 3px;\nbackground-color:{qt_light};"
+                f"\ntext-align: left;\ncolor:{qt_dark};\n"
                 f"border-radius: 5px;}}\n\n"
-                f"QPushButton:hover{{\n	background-color: rgb("
-                f"{even_lighter.red()},{even_lighter.green()},{even_lighter.blue()});\n}}"
+                f"QPushButton:hover{{\nborder:2px solid;\nborder-color: {qt_lighter};\n}}"
                 f"QPushButton:disabled{{\n	background-color: rgb(160,160,160);\n"
                 f"color: rgb(120,120,120)}}"
-                f"QPushButton:checked{{\n	background-color: rgb("
-                f"{even_lighter.red()},{even_lighter.green()},{even_lighter.blue()});\n}}"
+                f"QPushButton:checked{{background-color: {qt_lighter};\n}}"
+                f"QPushButton:pressed{{\n	background-color: {qt_lighter};\n}}"
             )
+            b.setFlat(False)
         for k, b in self.menu_buttons.items():
             b.setObjectName(k)
             b.toggled.connect(self.on_main_buttons_clicked)
@@ -420,7 +424,7 @@ class MainWindow(QMainWindow):
 
         self.setCursor(Qt.ArrowCursor)
         self._enable_buttons(True)
-        self.menu.set_collapsed(True)
+        # self.menu.set_collapsed(True)
 
         return loaded_data, loadable_labels
 
@@ -492,7 +496,7 @@ class MainWindow(QMainWindow):
         self.load_video(data.get("video_file", None))
         self._set_sync(data.get("sync_file", None))
         self._enable_buttons(True)
-        self.menu.set_collapsed(True)
+        # self.menu.set_collapsed(True)
 
     def _set_sync(self, sync_file: str):
         """Set the synchronization for each plot"""
