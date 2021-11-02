@@ -93,14 +93,14 @@ class MainWindow(QMainWindow):
     see our `General Information` part of the docs, section `Adding support for other systems`."""
 
     def __init__(
-        self,
-        parent=None,
-        data_dir=None,
-        settings=BaseSettings,
-        theme=BaseTheme,
-        plugins=None,
-        labels=None,
-        events=None,
+            self,
+            parent=None,
+            data_dir=None,
+            settings=BaseSettings,
+            theme=BaseTheme,
+            plugins=None,
+            labels=None,
+            events=None,
     ):
 
         super().__init__()
@@ -321,10 +321,21 @@ class MainWindow(QMainWindow):
             sync = pd.concat([sync, pd.DataFrame(data=plot.sync_info, columns=[plot_name])], axis=1)
         sync = pd.concat([sync, pd.DataFrame(data=self.video_plot.sync_info, columns=["Video"])], axis=1)
         self.VideoWindow.set_sync(self.video_plot.sync_info["start"], self.video_plot.sync_info["end"])
-        file_name, file_ending = QFileDialog.getSaveFileName(self, "Save Synchronization File", filter=".xlsx")
+        # in case the desired file name was specified in plot data, store sync data automatically
+        plot_data_key = list(self.global_data.plot_data.keys())[0]
+        additional_data = self.global_data.plot_data[plot_data_key].additional_data
+        study_part_specified = True if "data_specifier" in additional_data else False
+        if study_part_specified:
+            # automatically build sync file name
+            file_name = self.global_data.data_file + os.sep + "video" + os.sep + "{}_sync".format(
+                additional_data["data_specifier"])
+            file_ending = ".xlsx"
+        else:
+            file_name, file_ending = QFileDialog.getSaveFileName(self, "Save Synchronization File", filter=".xlsx")
         if file_name is None:
             return
         sync.to_excel(file_name + file_ending)
+        UserInformation().inform_user("Sync file was stored under {}".format(file_name + file_ending))
         for plot in self.sensor_plots.values():
             plot.adapt_to_opening_video_window()
 
@@ -466,7 +477,7 @@ class MainWindow(QMainWindow):
                 "There were no loaders passed to the GUI. Read more about the fact why the plugin you created does "
                 "not show up in the GUI by clicking the link below.",
                 help_link="https://mad-gui.readthedocs.io/en/latest/troubleshooting.html#the-plugin-i-created-does-not-"
-                "show-up-in-the-GUI",
+                          "show-up-in-the-GUI",
             )
             return
 
@@ -627,7 +638,7 @@ class MainWindow(QMainWindow):
                 "There were no algorithms passed to the GUI. Read more about the fact why the plugin you created does "
                 "not show up in the GUI by clicking the link below.",
                 help_link="https://mad-gui.readthedocs.io/en/latest/troubleshooting.html#the-plugin-i-created-does-not-"
-                "show-up-in-the-gui",
+                          "show-up-in-the-gui",
             )
             return
 
