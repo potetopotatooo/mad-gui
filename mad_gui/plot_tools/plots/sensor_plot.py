@@ -266,8 +266,7 @@ class SensorPlot(BasePlot):
         if start_time:
             start_time_qt = QTime(start_time.hour, start_time.minute, start_time.second)
             channel_items = {"bottom": TimeAxisItem(start_time_qt, orientation="bottom", parent=self)}
-            self.setchannelItems(channel_items)
-            ax_bottom = self.getchannel("bottom")
+            self.setAxisItems(channel_items)
             ax_bottom.setLabel(text="time [hh:mm:ss]")
         colors_fau = list(Config.theme.FAU_PHILFAK_COLORS.values())
         colors_fau.extend(Config.theme.FAU_NATFAK_COLORS.values())

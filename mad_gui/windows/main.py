@@ -550,6 +550,7 @@ class MainWindow(QMainWindow):
 
         # Create new plots
         for sensor_name, data in data_dict.items():
+            start_time = data.additional_data.get("start_time")  # defaults to None if start_time is not set
             plot = SensorPlot(
                 plot_data=data,
                 initial_plot_channels=getattr(Config.settings, "CHANNELS_TO_PLOT", None),
