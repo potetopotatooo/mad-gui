@@ -327,7 +327,7 @@ class MainWindow(QMainWindow):
         data_specifier = True if "data_specifier" in additional_data else False
         if data_specifier:
             # automatically build sync file name
-            file_name = self.global_data.data_file + os.sep + "video" + os.sep + "{}_sync".format(
+            file_name = str(Path(self.global_data.video_file).parent) + os.sep + "{}_sync".format(
                 additional_data["data_specifier"])
             file_ending = ".xlsx"
         else:
