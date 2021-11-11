@@ -54,8 +54,8 @@ class VideoWindow(Ui_VideoWindow, QObject):
         self.player.mediaStatusChanged.connect(self.set_rate)
         self.player.setVideoOutput(self.view_video)
         self.player.setNotifyInterval(10)
-        self.player.setPlaybackRate(1.0)
-        self.player.setVolume(0)
+        self.player.setPlaybackRate(1.5)  # video speed
+        self.player.setVolume(20)  # video volume
         # trigger mediaStatusChanged event, such that self.fps is set in self.set_rate
         self.player.play()
         self.player.pause()
