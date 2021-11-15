@@ -28,8 +28,11 @@ class VideoWindow(Ui_VideoWindow, QObject):
         self.player.positionChanged.connect(self.frame_changed)
         self.player.durationChanged.connect(self.set_slider_range)
         self.btn_play_pause.clicked.connect(self.toggle_play)
+        self.btn_video_speed.clicked.connect(self.toggle_speed)
         self.setStyleSheet(parent.styleSheet())
         self.setWindowFlag(Qt.WindowStaysOnTopHint)
+        self.playback_speeds = [1, 2, 3]
+        self.current_playback_speed_index = 0
 
     def _init_position(self):
         """Move the window to the center of the parent window."""
@@ -44,6 +47,17 @@ class VideoWindow(Ui_VideoWindow, QObject):
         else:
             self.player.play()
 
+    def toggle_speed(self):
+        # go to next entry in playback speeds list
+        self.current_playback_speed_index += 1
+        self.current_playback_speed_index %= len(self.playback_speeds)
+        new_playback_speed = self.playback_speeds[self.current_playback_speed_index]
+
+        # set new speed
+        self.player.pause()
+        self.player.setPlaybackRate(new_playback_speed)
+        self.player.play()
+
     def start_video(self, video_file: str):
         self.playlist.clear()
         self.playlist.addMedia(QMediaContent(QUrl.fromLocalFile(video_file)))
@@ -54,7 +68,7 @@ class VideoWindow(Ui_VideoWindow, QObject):
         self.player.mediaStatusChanged.connect(self.set_rate)
         self.player.setVideoOutput(self.view_video)
         self.player.setNotifyInterval(10)
-        self.player.setPlaybackRate(1.5)  # video speed
+        self.player.setPlaybackRate(self.playback_speeds[0])  # video speed
         self.player.setVolume(20)  # video volume
         # trigger mediaStatusChanged event, such that self.fps is set in self.set_rate
         self.player.play()
@@ -137,6 +151,8 @@ class VideoWindow(Ui_VideoWindow, QObject):
             start = 0
             end = self.duration
         else:
+            if not self.fps:
+                self.set_rate()
             start = self.sync_info["start"] / self.fps * 1000
             end = self.sync_info["end"] / self.fps * 1000
 

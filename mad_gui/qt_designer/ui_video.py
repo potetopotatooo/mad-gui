@@ -36,7 +36,14 @@ class Ui_VideoWindow(QWidget):
         self.btn_play_pause.setMaximumSize(QSize(150, 16777215))
         self.btn_play_pause.setObjectName("btn_play_pause")
         self.btn_play_pause.setText("Play / Pause")
+
+        self.btn_video_speed = QPushButton()
+        self.btn_video_speed.setMaximumSize(QSize(150, 16777215))
+        self.btn_video_speed.setObjectName("btn_video_speed")
+        self.btn_video_speed.setText("Change speed")
+
         self.horizontalLayout.addWidget(self.btn_play_pause)
+        self.horizontalLayout.addWidget(self.btn_video_speed)
 
         self.slider = QSlider()
         self.slider.setOrientation(Qt.Horizontal)
