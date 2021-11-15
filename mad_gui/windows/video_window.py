@@ -151,6 +151,7 @@ class VideoWindow(Ui_VideoWindow, QObject):
             start = 0
             end = self.duration
         else:
+            # to get rid of warning
             if not self.fps:
                 self.set_rate()
             start = self.sync_info["start"] / self.fps * 1000
