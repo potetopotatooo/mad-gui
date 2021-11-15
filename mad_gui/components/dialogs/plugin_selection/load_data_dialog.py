@@ -124,7 +124,7 @@ class LoadDataDialog(QDialog):
             file_name = ask_for_file_name(self.base_dir, parent=self, file_type=loader.file_type[property_name])
         if file_name is not None:
             self.state.set(property_name, file_name)
-            self.base_dir = str(Path(file_name).parent)
+            self.base_dir = str(Path(file_name))
 
     def process_data(self):
         """Use the selected loader for the selcted data.
@@ -158,7 +158,8 @@ class LoadDataDialog(QDialog):
             return None, None
 
         try:
-            data = loader.load_sensor_data(self.state.data_file)
+            # TODO: this assumes that load_sensor_data was overwritten with additional video_file parameter
+            data = loader.load_sensor_data(self.state.data_file, video_file=self.state.video_file)
         except Exception as e:  # noqa
             self.setCursor(Qt.ArrowCursor)
             UserInformation.inform(
